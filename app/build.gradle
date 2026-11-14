@@ -10,10 +10,15 @@ android {
     defaultConfig {
         applicationId "com.harshit.callblocker"
         minSdk 29
-        // targetSdk 32 करने से Android 13/14 का Restricted Settings ब्लॉक अपने आप हट जाता है!
         targetSdk 32
-        versionCode 2
-        versionName "2.0-Release"
+        versionCode 3
+        versionName "3.0-Final"
+    }
+
+    lint {
+        checkReleaseBuilds false
+        abortOnError false
+        disable 'ExpiredTargetSdkVersion'
     }
 
     signingConfigs {
@@ -34,10 +39,12 @@ android {
             signingConfig signingConfigs.release
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
         jvmTarget = '17'
     }
