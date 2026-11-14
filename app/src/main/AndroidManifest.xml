@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- 1. ऐप खोलने के लिए मुख्य Launcher Activity -->
+        <!-- 1. ऐप का आइकन और मुख्य स्क्रीन -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,24 +24,25 @@
             </intent-filter>
         </activity>
 
-        <!-- 2. यह DIAL Intent ऐप को "Default caller ID and spam app" लिस्ट में दिखाने के लिए 100% अनिवार्य है -->
-        <activity-alias
-            android:name=".CallerIdRoleAlias"
-            android:targetActivity=".MainActivity"
+        <!-- 2. असली Activity (alias नहीं) जो Default Caller ID & Spam लिस्ट की अनिवार्य शर्त है -->
+        <activity
+            android:name=".DialerActivity"
             android:exported="true"
-            android:enabled="true">
+            android:enabled="true"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.DIAL" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:scheme="tel" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.DIAL" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity-alias>
+        </activity>
 
-        <!-- 3. 0ms Background Call Screening Service -->
+        <!-- 3. 0ms Call Screening Service -->
         <service
             android:name=".SpamBlockerService"
             android:permission="android.permission.BIND_CALL_SCREENING_SERVICE"
@@ -51,7 +52,7 @@
             </intent-filter>
         </service>
 
-        <!-- 4. Backup Call Receiver -->
+        <!-- 4. Backup Receiver -->
         <receiver
             android:name=".CallReceiver"
             android:exported="true">
