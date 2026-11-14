@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Realme/ColorOS में Default Spam App लिस्ट में दिखने के लिए जरूरी -->
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -19,23 +22,20 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- Default Caller ID लिस्ट में दिखने के लिए जरूरी फिल्टर -->
             <intent-filter>
                 <action android:name="android.intent.action.DIAL" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="tel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="tel" />
             </intent-filter>
         </activity>
 
-        <!-- Method 1: Instant Call Cut Receiver (बिना Default App बने काम करेगा) -->
-        <receiver
-            android:name=".CallReceiver"
-            android:exported="true">
-            <intent-filter android:priority="999">
-                <action android:name="android.intent.action.PHONE_STATE" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Method 2: Call Screening Service -->
+        <!-- 0ms Pre-Ring Call Blocker (रिंग बजने से पहले ब्लॉक करेगा) -->
         <service
             android:name=".SpamBlockerService"
             android:permission="android.permission.BIND_CALL_SCREENING_SERVICE"
@@ -44,6 +44,15 @@
                 <action android:name="android.telecom.CallScreeningService" />
             </intent-filter>
         </service>
+
+        <!-- Backup Instant Blocker -->
+        <receiver
+            android:name=".CallReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
 
     </application>
 </manifest>
