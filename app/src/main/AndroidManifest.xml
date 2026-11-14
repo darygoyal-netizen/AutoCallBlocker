@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_CALL_LOG" />
     <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS" />
@@ -13,6 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
+        <!-- 1. ऐप खोलने के लिए मुख्य Launcher Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -22,7 +24,24 @@
             </intent-filter>
         </activity>
 
-        <!-- Exact AOSP CallScreeningService Declaration -->
+        <!-- 2. यह DIAL Intent ऐप को "Default caller ID and spam app" लिस्ट में दिखाने के लिए 100% अनिवार्य है -->
+        <activity-alias
+            android:name=".CallerIdRoleAlias"
+            android:targetActivity=".MainActivity"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="tel" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity-alias>
+
+        <!-- 3. 0ms Background Call Screening Service -->
         <service
             android:name=".SpamBlockerService"
             android:permission="android.permission.BIND_CALL_SCREENING_SERVICE"
@@ -32,6 +51,7 @@
             </intent-filter>
         </service>
 
+        <!-- 4. Backup Call Receiver -->
         <receiver
             android:name=".CallReceiver"
             android:exported="true">
