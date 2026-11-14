@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- मुख्य ऐप स्क्रीन (साफ-सुथरा Launcher) -->
+        <!-- 1. मुख्य ऐप स्क्रीन (Launcher Icon के लिए) -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -25,7 +25,23 @@
             </intent-filter>
         </activity>
 
-        <!-- 0ms Pre-Ring Call Screening Service -->
+        <!-- 2. Default Caller ID & Spam लिस्ट में दिखने के लिए जरूरी Activity -->
+        <activity
+            android:name=".DialerRoleActivity"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DIAL" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="tel" />
+            </intent-filter>
+        </activity>
+
+        <!-- 3. 0ms Pre-Ring Call Screening Service -->
         <service
             android:name=".SpamBlockerService"
             android:permission="android.permission.BIND_CALL_SCREENING_SERVICE"
@@ -35,7 +51,7 @@
             </intent-filter>
         </service>
 
-        <!-- Instant Call Cut Receiver -->
+        <!-- 4. Instant Call Cut Receiver -->
         <receiver
             android:name=".CallReceiver"
             android:exported="true">
