@@ -1,4 +1,4 @@
-name: Build Call Blocker APK
+name: Build Signed Release Call Blocker
 
 on:
   push:
@@ -24,12 +24,14 @@ jobs:
         with:
           gradle-version: '8.4'
 
-      - name: Build Debug APK
-        run: gradle assembleDebug
+      - name: Generate Release Keystore & Build Signed Release APK
+        run: |
+          keytool -genkey -v -keystore release.keystore -alias blockerkey -keyalg RSA -keysize 2048 -validity 10000 -storepass 123456 -keypass 123456 -dname "CN=Harshit, OU=Mobile, O=Blocker, L=Shamli, S=UP, C=IN"
+          gradle assembleRelease
 
-      - name: Upload APK
+      - name: Upload Signed Release APK
         uses: actions/upload-artifact@v4
         with:
-          name: AutoCallBlocker-APK
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: AutoCallBlocker-Signed-Release
+          path: app/build/outputs/apk/release/app-release.apk
           
