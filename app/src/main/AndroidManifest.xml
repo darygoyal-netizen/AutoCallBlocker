@@ -14,7 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- 1. मुख्य Launcher Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,7 +23,6 @@
             </intent-filter>
         </activity>
 
-        <!-- 2. DIAL Intent - कुछ OEMs के लिए default list में दिखाने में मदद करता है -->
         <activity
             android:name=".DialerActivity"
             android:exported="true"
@@ -42,7 +40,7 @@
             </intent-filter>
         </activity>
 
-        <!-- 3. असली 0ms Call Screening Service (सबसे महत्वपूर्ण) -->
+        <!-- सही permission -->
         <service
             android:name=".SpamBlockerService"
             android:permission="android.permission.BIND_SCREENING_SERVICE"
@@ -52,7 +50,6 @@
             </intent-filter>
         </service>
 
-        <!-- 4. Backup Receiver (अगर screening role न मिले तो भी कुछ काम करे) -->
         <receiver
             android:name=".CallReceiver"
             android:exported="true">
