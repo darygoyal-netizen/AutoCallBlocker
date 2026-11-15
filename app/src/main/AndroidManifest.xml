@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
-        <!-- 1. ऐप का आइकन और मुख्य स्क्रीन -->
+        <!-- 1. मुख्य Launcher Activity -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
 
-        <!-- 2. असली Activity (alias नहीं) जो Default Caller ID & Spam लिस्ट की अनिवार्य शर्त है -->
+        <!-- 2. DIAL Intent - कुछ OEMs के लिए default list में दिखाने में मदद करता है -->
         <activity
             android:name=".DialerActivity"
             android:exported="true"
@@ -42,17 +42,17 @@
             </intent-filter>
         </activity>
 
-        <!-- 3. 0ms Call Screening Service -->
+        <!-- 3. असली 0ms Call Screening Service (सबसे महत्वपूर्ण) -->
         <service
             android:name=".SpamBlockerService"
-            android:permission="android.permission.BIND_CALL_SCREENING_SERVICE"
+            android:permission="android.permission.BIND_SCREENING_SERVICE"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.telecom.CallScreeningService" />
             </intent-filter>
         </service>
 
-        <!-- 4. Backup Receiver -->
+        <!-- 4. Backup Receiver (अगर screening role न मिले तो भी कुछ काम करे) -->
         <receiver
             android:name=".CallReceiver"
             android:exported="true">
